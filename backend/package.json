@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "if (Test-Path dist) { rm -r -fo dist }; New-Item -ItemType Directory -Path dist | Out-Null; cp -R src/* dist",
+    "build": "rm -rf dist && cp -R src dist",
+    "build:win": "if (Test-Path dist) { rm -r -fo dist }; New-Item -ItemType Directory -Path dist | Out-Null; cp -R src/* dist",
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
