@@ -1,23 +1,26 @@
 import express from "express";
 import cors from "cors";
+
 import "dotenv/config";
+
 import fs from "fs";
 import path from "path";
-import { createServer } from "http";
+
 import { clerkMiddleware } from "@clerk/express";
+
 import User from "./models/user.model.js";
 import { connectDB } from "./lib/db.js";
 import job from "./lib/cron.js";
+
 import clerkWebhook from "./webhooks/clerk.webhook.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
+import { app, server } from "./lib/socket.js";
 
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
-const publicDir = path.join(process.cwd(), "public");
 
-const app = express();
-const server = createServer(app);
+const publicDir = path.join(process.cwd(), "public");
 
 // it's important that you don't parse the webhook event data, it should be in the raw format
 app.use(
@@ -35,7 +38,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/messsages", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 // if the public directory exists, serve the static files
 // this is for the production build
